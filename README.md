@@ -26,31 +26,7 @@ npm install persian-captcha-generator
 yarn add persian-captcha-generator
 ```
 
-
-## Function API
-The `persianCaptchaGenerator` function accepts the following options:
-| Parameter       | Type                           | Default   | Description                                                                        |
-|-----------------|--------------------------------|-----------|------------------------------------------------------------------------------------|
-| `width`           | `number`                         | `200`       | Width of the captcha image (in pixels).                                            |
-| `height`          | `number`                         | `80`        | Height of the captcha image (in pixels).                                           |
-| `length`          | `number`                         | `5`         | Number of characters in the captcha text.                                          |
-| `backgroundColor` | `string`                         | `"#ffffff"` | Background color of the captcha image (CSS color value).                           |
-| `textColor`       | `string`                         | `"#000000"` | Text color of the captcha characters (CSS color value).                            |
-| `fontSize`        | `string`                         | `32` | Font size of the captcha characters (in pixels).                                   |
-| `lineCount`       | `string`                         | `5`         | Number of random lines drawn over the captcha for obfuscation.                     |
-| `dotCount`        | `string`                         | `50`        | Number of random noise dots added to the captcha image.                            |
-| `characterSet`    | `"numbers"`, `"alphabets"`, `"both"` | `numbers`   | Choose the type of characters in the captcha: Persian numbers, alphabets, or both. |
-
-
-## Output
-The `persianCaptchaGenerator` function returns an object with the following properties:
-| Property | Type     | Description                                           |
-|----------|----------|-------------------------------------------------------|
-| `text`   | `string` | The randomly generated captcha text (for validation). |
-| `buffer` | `Buffer` | The PNG image buffer of the generated captcha.        |
-
 ## Usage
-
 ```typescript
 import fs from "fs";
 import { persianCaptchaGenerator } from "persian-captcha-generator";
@@ -76,8 +52,28 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
 })();
 ```
 
+## Function API
+The `persianCaptchaGenerator` function accepts the following options:
+| Parameter       | Type                           | Default   | Description                                                                        |
+|-----------------|--------------------------------|-----------|------------------------------------------------------------------------------------|
+| `width`           | `number`                         | `200`       | Width of the captcha image (in pixels).                                            |
+| `height`          | `number`                         | `80`        | Height of the captcha image (in pixels).                                           |
+| `length`          | `number`                         | `5`         | Number of characters in the captcha text.                                          |
+| `backgroundColor` | `string`                         | `"#ffffff"` | Background color of the captcha image (CSS color value).                           |
+| `textColor`       | `string`                         | `"#000000"` | Text color of the captcha characters (CSS color value).                            |
+| `fontSize`        | `string`                         | `32` | Font size of the captcha characters (in pixels).                                   |
+| `lineCount`       | `string`                         | `5`         | Number of random lines drawn over the captcha for obfuscation.                     |
+| `dotCount`        | `string`                         | `50`        | Number of random noise dots added to the captcha image.                            |
+| `characterSet`    | `"numbers"`, `"alphabets"`, `"both"` | `numbers`   | Choose the type of characters in the captcha: Persian numbers, alphabets, or both. |
+
+## Output
+The `persianCaptchaGenerator` function returns an object with the following properties:
+| Property | Type     | Description                                           |
+|----------|----------|-------------------------------------------------------|
+| `text`   | `string` | The randomly generated captcha text (for validation). |
+| `buffer` | `Buffer` | The PNG image buffer of the generated captcha.        |
+
 ## Sample images
 ![image](images/captcha_numbers.png)
 ![image](images/captcha_alphabets.png)
 ![image](images/captcha_both.png)
-
