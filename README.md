@@ -51,8 +51,6 @@ The `persianCaptchaGenerator` function returns an object with the following prop
 
 ## Usage
 
-Basic Example with File Saving (Using fs)
-You can generate a captcha and save it as a PNG file for debugging or other purposes.
 ```typescript
 import fs from "fs";
 import { persianCaptchaGenerator } from "persian-captcha-generator";
@@ -78,7 +76,7 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
 })();
 ```
 
-## Sample image
+## Sample images
 ![image](images/captcha_numbers.png)
 ![image](images/captcha_alphabets.png)
 ![image](images/captcha_both.png)
