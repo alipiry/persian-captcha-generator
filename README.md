@@ -52,7 +52,7 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
   });
 
   // Save the PNG buffer as a file
-  fs.writeFileSync("captcha.png", captcha.buffer);
+  fs.writeFileSync("captcha.png", captcha.imageBuffer);
 
   // Log the captcha text for validation
   console.log("Generated Captcha Text:", captcha.text);
@@ -80,7 +80,7 @@ The `persianCaptchaGenerator` function returns an object with the following prop
 | Property | Type | Description |
 |----------|----------|-------------------------------------------------------|
 | `text` | `string` | The randomly generated captcha text (for validation). |
-| `buffer` | `Buffer` | The PNG image buffer of the generated captcha. |
+| `imageBuffer` | `Buffer` | The PNG image buffer of the generated captcha. |
 
 ## Sample images
 
