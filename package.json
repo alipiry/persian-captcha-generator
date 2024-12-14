@@ -1,6 +1,6 @@
 {
   "name": "persian-captcha-generator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A lightweight library for generating customizable captchas with Persian numbers and alphabets.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -84,9 +84,9 @@ The `persianCaptchaGenerator` function returns an object with the following prop
 
 ## Sample images
 
-![captcha_numbers](media/captcha_numbers.png)
-![captcha_alphabets](media/captcha_alphabets.png)
-![captcha_both](media/captcha_both.png)
+![captcha_numbers](https://github.com/user-attachments/assets/48afd880-76d1-420f-ba7a-a885f016ace9)
+![captcha_alphabets](https://github.com/user-attachments/assets/fdefa724-a428-4bca-9ead-8c91c62a67eb)
+![captcha_both](https://github.com/user-attachments/assets/f688452f-6e32-4e37-886c-e9a5f5938549)
 
 ## License
 
