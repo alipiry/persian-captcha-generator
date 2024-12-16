@@ -23,8 +23,8 @@ export async function persianCaptchaGenerator({
   dotCount = 50,
   characterSet = "numbers",
 }: PersianCaptchaGeneratorOptions) {
-  const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
+  const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
 
   let characters: string;
   if (characterSet === "numbers") {
