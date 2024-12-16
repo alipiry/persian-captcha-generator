@@ -34,6 +34,8 @@ yarn add persian-captcha-generator
 
 ## Usage
 
+### NodeJS
+
 ```typescript
 import fs from "fs";
 import { persianCaptchaGenerator } from "persian-captcha-generator";
@@ -59,6 +61,10 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
 })();
 ```
 
+### NextJS
+
+<a href="https://github.com/alipiry/next15-persian-captcha">NextJS 15 Example</a>
+
 ## Function API
 
 The `persianCaptchaGenerator` function accepts the following options:
@@ -72,7 +78,7 @@ The `persianCaptchaGenerator` function accepts the following options:
 | `fontSize` | `string` | `32` | Font size of the captcha characters (in pixels). |
 | `lineCount` | `string` | `5` | Number of random lines drawn over the captcha for obfuscation. |
 | `dotCount` | `string` | `50` | Number of random noise dots added to the captcha image. |
-| `characterSet` | `"numbers"`, `"alphabets"`, `"both"` | `numbers` | Choose the type of characters in the captcha: Persian numbers, alphabets, or both. |
+| `characterSet` | `numbers`, `alphabets`, `both` | `numbers` | Choose the type of characters in the captcha: Persian numbers, alphabets, or both. |
 
 ## Output
 
