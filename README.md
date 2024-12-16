@@ -63,7 +63,37 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
 
 ### NextJS
 
-<a href="https://github.com/alipiry/next15-persian-captcha">NextJS 15 Example</a>
+Route handler:
+
+```typescript
+import { NextResponse } from "next/server";
+import { persianCaptchaGenerator } from "persian-captcha-generator";
+
+export async function GET() {
+  const captcha = await persianCaptchaGenerator({
+    length: 6,
+    characterSet: "numbers",
+    width: 300,
+    height: 100,
+    fontSize: 40,
+    lineCount: 10,
+    dotCount: 100,
+    textColor: "#000000",
+    backgroundColor: "#f8f9fa",
+  });
+
+  const imageBuffer = Buffer.from(captcha.imageBuffer);
+
+  return new NextResponse(imageBuffer, {
+    headers: {
+      "Content-Type": "image/png",
+      "Content-Length": imageBuffer.length.toString(),
+    },
+  });
+}
+```
+
+<a href="https://github.com/alipiry/next15-persian-captcha">See full example here</a>
 
 ## Function API
 
