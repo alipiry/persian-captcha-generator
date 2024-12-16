@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import path from "path";
+import fs from "fs";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -40,13 +40,6 @@ export async function persianCaptchaGenerator({
     characters.charAt(Math.floor(Math.random() * characters.length))
   ).join("");
 
-  const vazirFontPath = path.join(
-    __dirname,
-    "..",
-    "fonts",
-    "Vazirmatn-Regular.ttf"
-  );
-
   const randomOffsets = Array.from({ length: randomText.length }, () =>
     Math.floor(Math.random() * 10 - 5)
   );
@@ -86,15 +79,14 @@ export async function persianCaptchaGenerator({
   const svgContent = `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <style>
-        @font-face {
-          font-family: 'Vazir';
-          src: url('file://${vazirFontPath}');
+        text {
+          font-family: sans-serif;
         }
       </style>
       <rect width="100%" height="100%" fill="${backgroundColor}" />
       ${lineElements}
       ${dotElements}
-      <text x="50%" y="50%" font-size="${fontSize}" font-family="Vazir" fill="${textColor}"
+      <text x="50%" y="50%" font-size="${fontSize}" font-family="sans-serif" fill="${textColor}"
             text-anchor="middle" dominant-baseline="middle"
             stroke="${textColor}" stroke-width="0.75">
         ${tspanElements}
