@@ -1,5 +1,4 @@
 import sharp from "sharp";
-import fs from "fs";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
