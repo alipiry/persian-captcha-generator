@@ -1,5 +1,6 @@
 import sharp from "sharp";
 import fs from "fs";
+import path from "path";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -76,9 +77,11 @@ export async function persianCaptchaGenerator({
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />`;
   }).join("");
 
-  const fontPath = require.resolve(
-    "persian-captcha-generator/src/fonts/Vazirmatn-Regular.ttf"
-  );
+  const fontPath = process.env.JEST_WORKER_ID
+    ? path.resolve(__dirname, "fonts", "Vazirmatn-Regular.ttf")
+    : require.resolve(
+        "persian-captcha-generator/src/fonts/Vazirmatn-Regular.ttf"
+      );
   if (!fs.existsSync(fontPath)) {
     throw new Error("Font file not found at: " + fontPath);
   }
