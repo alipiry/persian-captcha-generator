@@ -23,8 +23,13 @@ export async function persianCaptchaGenerator({
   dotCount = 50,
   characterSet = "numbers",
 }: PersianCaptchaGeneratorOptions) {
-  const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
+  const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
+
+  registerFont(
+    "node_modules/persian-captcha-generator/fonts/Vazirmatn-Regular.ttf",
+    { family: "Vazirmatn" }
+  );
 
   let characters: string;
   if (characterSet === "numbers") {
@@ -38,11 +43,6 @@ export async function persianCaptchaGenerator({
   const randomText = Array.from({ length }, () =>
     characters.charAt(Math.floor(Math.random() * characters.length))
   ).join("");
-
-  registerFont(
-    "node_modules/persian-captcha-generator/fonts/Vazirmatn-Regular.ttf",
-    { family: "Vazirmatn" }
-  );
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");
