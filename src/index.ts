@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 
 interface PersianCaptchaGeneratorOptions {
+  environment: "node" | "next";
   width?: number;
   height?: number;
   length?: number;
@@ -12,9 +13,11 @@ interface PersianCaptchaGeneratorOptions {
   lineCount?: number;
   dotCount?: number;
   characterSet?: "numbers" | "alphabets" | "both";
+  fontPath?: string;
 }
 
 export async function persianCaptchaGenerator({
+  environment = "node",
   width = 200,
   height = 80,
   length = 5,
@@ -24,6 +27,7 @@ export async function persianCaptchaGenerator({
   lineCount = 8,
   dotCount = 50,
   characterSet = "numbers",
+  fontPath,
 }: PersianCaptchaGeneratorOptions) {
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
@@ -77,16 +81,27 @@ export async function persianCaptchaGenerator({
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />`;
   }).join("");
 
-  const fontPath = process.env.JEST_WORKER_ID
-    ? path.resolve(__dirname, "fonts", "Vazirmatn-Regular.ttf")
-    : require.resolve(
-        "persian-captcha-generator/src/fonts/Vazirmatn-Regular.ttf"
-      );
-  if (!fs.existsSync(fontPath)) {
-    throw new Error("Font file not found at: " + fontPath);
+  let resolvedFontPath: string;
+
+  if (environment === "node") {
+    resolvedFontPath = path.resolve(
+      __dirname,
+      "fonts",
+      "Vazirmatn-Regular.ttf"
+    );
+  } else if (environment === "next" && fontPath) {
+    resolvedFontPath = fontPath;
+  } else {
+    throw new Error(
+      "For Next.js environment, please provide a valid fontPath option pointing to the font file in the public directory."
+    );
   }
 
-  const fontBase64 = fs.readFileSync(fontPath).toString("base64");
+  if (!fs.existsSync(resolvedFontPath)) {
+    throw new Error("Font file not found at: " + resolvedFontPath);
+  }
+
+  const fontBase64 = fs.readFileSync(resolvedFontPath).toString("base64");
 
   const svgContent = `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +123,7 @@ export async function persianCaptchaGenerator({
         ${tspanElements}
       </text>
     </svg>
- `;
+  `;
 
   const buffer = await sharp(Buffer.from(svgContent)).png().toBuffer();
 

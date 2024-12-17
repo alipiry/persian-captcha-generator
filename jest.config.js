@@ -4,5 +4,4 @@ module.exports = {
   testEnvironment: "node",
   moduleFileExtensions: ["ts", "js"],
   roots: ["<rootDir>/src/tests"],
-  setupFiles: ["<rootDir>/jest.setup.js"],
 };
