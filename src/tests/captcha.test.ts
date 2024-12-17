@@ -3,7 +3,6 @@ import { persianCaptchaGenerator } from "../index";
 describe("Captcha Generator", () => {
   it("should generate a captcha with Persian numbers", async () => {
     const captcha = await persianCaptchaGenerator({
-      environment: "node",
       length: 6,
       characterSet: "numbers",
     });
@@ -15,7 +14,6 @@ describe("Captcha Generator", () => {
 
   it("should generate a captcha with Persian alphabets", async () => {
     const captcha = await persianCaptchaGenerator({
-      environment: "node",
       length: 6,
       characterSet: "alphabets",
     });
@@ -27,7 +25,6 @@ describe("Captcha Generator", () => {
 
   it("should generate a captcha with both Persian numbers and alphabets", async () => {
     const captcha = await persianCaptchaGenerator({
-      environment: "node",
       length: 6,
       characterSet: "both",
     });

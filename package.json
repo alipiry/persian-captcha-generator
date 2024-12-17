@@ -1,7 +1,7 @@
 {
   "name": "persian-captcha-generator",
   "version": "1.1.10",
-  "description": "A lightweight library for generating customizable captchas with Persian numbers and alphabets.",
+  "description": "A library for generating customizable captchas with Persian numbers and alphabets using node-canvas.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,8 +10,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "axios": "^1.7.9",
-    "sharp": "^0.33.5"
+    "canvas": "^2.11.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

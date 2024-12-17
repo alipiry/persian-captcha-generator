@@ -1,9 +1,8 @@
-import sharp from "sharp";
+import fs from "fs";
 import path from "path";
-import axios from "axios";
+import { createCanvas, registerFont } from "canvas";
 
 interface PersianCaptchaGeneratorOptions {
-  environment: "node" | "next";
   width?: number;
   height?: number;
   length?: number;
@@ -13,11 +12,9 @@ interface PersianCaptchaGeneratorOptions {
   lineCount?: number;
   dotCount?: number;
   characterSet?: "numbers" | "alphabets" | "both";
-  fontPath?: string;
 }
 
 export async function persianCaptchaGenerator({
-  environment = "node",
   width = 200,
   height = 80,
   length = 5,
@@ -27,7 +24,6 @@ export async function persianCaptchaGenerator({
   lineCount = 8,
   dotCount = 50,
   characterSet = "numbers",
-  fontPath,
 }: PersianCaptchaGeneratorOptions) {
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
@@ -45,88 +41,57 @@ export async function persianCaptchaGenerator({
     characters.charAt(Math.floor(Math.random() * characters.length))
   ).join("");
 
-  const randomOffsets = Array.from({ length: randomText.length }, () =>
-    Math.floor(Math.random() * 10 - 5)
-  );
+  const fontPath = path.resolve(__dirname, "fonts", "Vazirmatn-Regular.ttf");
 
-  const tspanElements = randomText
-    .split("")
-    .map((char, index) => {
-      const offset = randomOffsets[index];
-      return `<tspan x="${
-        (width / (length + 1)) * (index + 1)
-      }" dy="${offset}">${char}</tspan>`;
-    })
-    .join("");
-
-  const lineElements = Array.from({ length: lineCount }, () => {
-    const x1 = Math.random() * width;
-    const y1 = Math.random() * height;
-    const x2 = Math.random() * width;
-    const y2 = Math.random() * height;
-    const cx = Math.random() * width;
-    const cy = Math.random() * height;
-    const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
-    const isCurved = Math.random() > 0.5;
-    return isCurved
-      ? `<path d="M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}" stroke="${color}" stroke-width="2" fill="none"/>`
-      : `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2"/>`;
-  }).join("");
-
-  const dotElements = Array.from({ length: dotCount }, () => {
-    const cx = Math.random() * width;
-    const cy = Math.random() * height;
-    const r = Math.random() * 2 + 1;
-    const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
-    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />`;
-  }).join("");
-
-  let fontBase64: string;
-
-  if (environment === "node") {
-    const resolvedFontPath = path.resolve(
-      __dirname,
-      "fonts",
-      "Vazirmatn-Regular.ttf"
-    );
-    fontBase64 = Buffer.from(
-      await import("fs").then((fs) => fs.readFileSync(resolvedFontPath))
-    ).toString("base64");
-  } else if (environment === "next" && fontPath) {
-    const response = await axios.get(fontPath, { responseType: "arraybuffer" });
-    fontBase64 = Buffer.from(response.data).toString("base64");
-  } else {
-    throw new Error(
-      "For Next.js environment, please provide a valid fontPath option pointing to the font file as a URL."
-    );
+  if (!fs.existsSync(fontPath)) {
+    throw new Error("Font file not found at: " + fontPath);
   }
 
-  const svgContent = `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        @font-face {
-          font-family: 'Vazirmatn';
-          src: url('data:font/ttf;base64,${fontBase64}');
-        }
-        text {
-          font-family: 'Vazirmatn';
-        }
-      </style>
-      <rect width="100%" height="100%" fill="${backgroundColor}" />
-      ${lineElements}
-      ${dotElements}
-      <text x="50%" y="50%" font-size="${fontSize}" fill="${textColor}"
-        text-anchor="middle" dominant-baseline="middle"
-        stroke="${textColor}" stroke-width="0.75">
-        ${tspanElements}
-      </text>
-    </svg>
-  `;
+  registerFont(fontPath, { family: "Vazirmatn" });
 
-  const buffer = await sharp(Buffer.from(svgContent)).png().toBuffer();
+  const canvas = createCanvas(width, height);
+  const context = canvas.getContext("2d");
+
+  context.fillStyle = backgroundColor;
+  context.fillRect(0, 0, width, height);
+
+  for (let i = 0; i < lineCount; i++) {
+    context.beginPath();
+    context.moveTo(Math.random() * width, Math.random() * height);
+    context.lineTo(Math.random() * width, Math.random() * height);
+    context.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    context.lineWidth = 2;
+    context.stroke();
+  }
+
+  for (let i = 0; i < dotCount; i++) {
+    context.beginPath();
+    context.arc(
+      Math.random() * width,
+      Math.random() * height,
+      Math.random() * 2 + 1,
+      0,
+      Math.PI * 2
+    );
+    context.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    context.fill();
+  }
+
+  context.font = `${fontSize}px Vazirmatn`;
+  context.fillStyle = textColor;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  randomText.split("").forEach((char, i) => {
+    const offset = Math.random() * 10 - 5;
+    const x = centerX - (length * fontSize) / 4 + i * (fontSize * 0.6);
+    context.fillText(char, x, centerY + offset);
+  });
 
   return {
     text: randomText,
-    imageBuffer: buffer,
+    imageBuffer: canvas.toBuffer(),
   };
 }
