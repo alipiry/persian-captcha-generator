@@ -40,7 +40,7 @@ export async function persianCaptchaGenerator({
   ).join("");
 
   registerFont(
-    "node_modules/persian-captcha-generator/src/fonts/Vazirmatn-Regular.ttf",
+    "node_modules/persian-captcha-generator/fonts/Vazirmatn-Regular.ttf",
     { family: "Vazirmatn" }
   );
 

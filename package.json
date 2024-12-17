@@ -22,7 +22,7 @@
   },
   "files": [
     "dist",
-    "src/fonts",
+    "fonts",
     "README.md"
   ],
   "keywords": [
