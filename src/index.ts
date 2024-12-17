@@ -1,4 +1,6 @@
 import sharp from "sharp";
+import fs from "fs";
+import path from "path";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -75,23 +77,32 @@ export async function persianCaptchaGenerator({
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />`;
   }).join("");
 
+  const fontPath = path.join(__dirname, "fonts", "Vazirmatn-Regular.ttf");
+  if (!fs.existsSync(fontPath)) {
+    throw new Error("Font file not found at: " + fontPath);
+  }
+
+  const fontBase64 = fs.readFileSync(fontPath).toString("base64");
+
   const svgContent = `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <style>
+        @font-face {
+          font-family: 'Vazirmatn';
+          src: url('data:font/ttf;base64,${fontBase64}');
+        }
         text {
-          font-family: sans-serif;
+          font-family: 'Vazirmatn';
         }
       </style>
       <rect width="100%" height="100%" fill="${backgroundColor}" />
-      ${lineElements}
-      ${dotElements}
-      <text x="50%" y="50%" font-size="${fontSize}" font-family="sans-serif" fill="${textColor}"
-            text-anchor="middle" dominant-baseline="middle"
-            stroke="${textColor}" stroke-width="0.75">
+      <text x="50%" y="50%" font-size="${fontSize}" fill="${textColor}"
+        text-anchor="middle" dominant-baseline="middle"
+        stroke="${textColor}" stroke-width="0.75">
         ${tspanElements}
       </text>
     </svg>
-  `;
+ `;
 
   const buffer = await sharp(Buffer.from(svgContent)).png().toBuffer();
 
