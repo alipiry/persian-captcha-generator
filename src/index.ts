@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { createCanvas, registerFont } from "canvas";
 
 interface PersianCaptchaGeneratorOptions {
@@ -41,13 +39,10 @@ export async function persianCaptchaGenerator({
     characters.charAt(Math.floor(Math.random() * characters.length))
   ).join("");
 
-  const fontPath = path.resolve(__dirname, "fonts", "Vazirmatn-Regular.ttf");
-
-  if (!fs.existsSync(fontPath)) {
-    throw new Error("Font file not found at: " + fontPath);
-  }
-
-  registerFont(fontPath, { family: "Vazirmatn" });
+  registerFont(
+    "node_modules/persian-captcha-generator/src/fonts/Vazirmatn-Regular.ttf",
+    { family: "Vazirmatn" }
+  );
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");
