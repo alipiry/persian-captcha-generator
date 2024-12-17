@@ -1,6 +1,6 @@
 import sharp from "sharp";
-import fs from "fs";
 import path from "path";
+import axios from "axios";
 
 interface PersianCaptchaGeneratorOptions {
   environment: "node" | "next";
@@ -81,27 +81,25 @@ export async function persianCaptchaGenerator({
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />`;
   }).join("");
 
-  let resolvedFontPath: string;
+  let fontBase64: string;
 
   if (environment === "node") {
-    resolvedFontPath = path.resolve(
+    const resolvedFontPath = path.resolve(
       __dirname,
       "fonts",
       "Vazirmatn-Regular.ttf"
     );
+    fontBase64 = Buffer.from(
+      await import("fs").then((fs) => fs.readFileSync(resolvedFontPath))
+    ).toString("base64");
   } else if (environment === "next" && fontPath) {
-    resolvedFontPath = fontPath;
+    const response = await axios.get(fontPath, { responseType: "arraybuffer" });
+    fontBase64 = Buffer.from(response.data).toString("base64");
   } else {
     throw new Error(
-      "For Next.js environment, please provide a valid fontPath option pointing to the font file in the public directory."
+      "For Next.js environment, please provide a valid fontPath option pointing to the font file as a URL."
     );
   }
-
-  if (!fs.existsSync(resolvedFontPath)) {
-    throw new Error("Font file not found at: " + resolvedFontPath);
-  }
-
-  const fontBase64 = fs.readFileSync(resolvedFontPath).toString("base64");
 
   const svgContent = `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
