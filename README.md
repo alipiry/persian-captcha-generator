@@ -61,6 +61,44 @@ import { persianCaptchaGenerator } from "persian-captcha-generator";
 })();
 ```
 
+### ExpressJS
+
+```typescript
+import express from "express";
+import { persianCaptchaGenerator } from "persian-captcha-generator";
+
+const app = express();
+const PORT = 3000;
+
+app.get("/captcha", async (_req, res) => {
+  try {
+    const captcha = await persianCaptchaGenerator({
+      width: 300,
+      height: 100,
+      length: 6,
+      backgroundColor: "#ffffff",
+      textColor: "#000000",
+      fontSize: 44,
+      lineCount: 8,
+      dotCount: 50,
+      characterSet: "both",
+    });
+
+    console.log("Generated Captcha Text:", captcha.text);
+
+    res.setHeader("Content-Type", "image/png");
+    res.send(captcha.imageBuffer);
+  } catch (error) {
+    console.error("Error generating captcha:", error);
+    res.status(500).send("Failed to generate captcha");
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+});
+```
+
 ### NextJS
 
 Route handler:
