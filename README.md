@@ -1,6 +1,6 @@
 # Persian Captcha Generator
 
-A lightweight library for generating customizable captchas with Persian numbers and alphabets. This library generates a captcha image with various options such as Persian numbers, alphabets, or both, and adds noise elements like random lines and dots for enhanced complexity.
+A library for generating customizable captchas with Persian numbers and alphabets. This library generates a captcha image with various options such as Persian numbers, alphabets, or both, and adds noise elements like random lines and dots for enhanced complexity.
 
 <div align="center">
   <h2>Made with ❤ by <a href="https://github.com/alipiry">Ali Piry</a></h2>

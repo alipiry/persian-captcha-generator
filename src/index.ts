@@ -1,3 +1,4 @@
+import path from "path";
 import { createCanvas, registerFont } from "canvas";
 
 interface PersianCaptchaGeneratorOptions {
@@ -26,10 +27,19 @@ export async function persianCaptchaGenerator({
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
 
-  registerFont(
-    "node_modules/persian-captcha-generator/fonts/Vazirmatn-Regular.ttf",
-    { family: "Vazirmatn" }
+  const fontPath = path.resolve(
+    __dirname,
+    "..",
+    "fonts",
+    "Vazirmatn-Regular.ttf"
   );
+
+  try {
+    registerFont(fontPath, { family: "Vazirmatn" });
+  } catch (error) {
+    console.error("Error registering font:", error);
+    throw new Error(`Failed to load font from path: ${fontPath}`);
+  }
 
   let characters: string;
   if (characterSet === "numbers") {
