@@ -1,4 +1,4 @@
-import { createCanvas, registerFont } from "canvas";
+import { createCanvas } from "canvas";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -10,15 +10,6 @@ interface PersianCaptchaGeneratorOptions {
   lineCount?: number;
   dotCount?: number;
   characterSet?: "numbers" | "alphabets" | "both";
-}
-
-const FONT_PATH = require.resolve("./fonts/Vazirmatn-Regular.ttf");
-
-try {
-  registerFont(FONT_PATH, { family: "Vazirmatn" });
-} catch (error) {
-  console.error(`Failed to register font at ${FONT_PATH}:`, error);
-  throw error;
 }
 
 export async function persianCaptchaGenerator({
@@ -76,7 +67,7 @@ export async function persianCaptchaGenerator({
     context.fill();
   }
 
-  context.font = `${fontSize}px Vazirmatn`;
+  context.font = `${fontSize}px`;
   context.fillStyle = textColor;
   context.textAlign = "center";
   context.textBaseline = "middle";
