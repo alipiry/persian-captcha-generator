@@ -1,4 +1,3 @@
-import path from "path";
 import { createCanvas, registerFont } from "canvas";
 
 interface PersianCaptchaGeneratorOptions {
@@ -13,7 +12,7 @@ interface PersianCaptchaGeneratorOptions {
   characterSet?: "numbers" | "alphabets" | "both";
 }
 
-const FONT_PATH = path.join(__dirname, "..", "fonts", "Vazirmatn-Regular.ttf");
+const FONT_PATH = require.resolve("./fonts/Vazirmatn-Regular.ttf");
 
 try {
   registerFont(FONT_PATH, { family: "Vazirmatn" });
