@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { createCanvas, registerFont } from "canvas";
+import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
 interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -14,7 +14,7 @@ interface PersianCaptchaGeneratorOptions {
   characterSet?: "numbers" | "alphabets" | "both";
 }
 
-function regFont() {
+function registerFont() {
   const possiblePaths = [
     path.resolve(__dirname, "..", "fonts", "IranNastaliq.ttf"),
     path.resolve(
@@ -43,14 +43,12 @@ function regFont() {
   }
 
   try {
-    registerFont(fontPath, { family: "IranNastaliq" });
+    GlobalFonts.registerFromPath(fontPath, "IranNastaliq");
   } catch (error) {
     console.error("Error registering font:", error);
     throw new Error(`Failed to load font from path: ${fontPath}`);
   }
 }
-
-regFont();
 
 export async function persianCaptchaGenerator({
   width = 200,
@@ -63,6 +61,8 @@ export async function persianCaptchaGenerator({
   dotCount = 50,
   characterSet = "numbers",
 }: PersianCaptchaGeneratorOptions) {
+  registerFont();
+
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
 
@@ -122,6 +122,6 @@ export async function persianCaptchaGenerator({
 
   return {
     text: randomText,
-    imageBuffer: canvas.toBuffer(),
+    imageBuffer: canvas.toBuffer("image/png"),
   };
 }
