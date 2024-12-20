@@ -54,11 +54,11 @@ regFont();
 
 export async function persianCaptchaGenerator({
   width = 200,
-  height = 80,
+  height = 100,
   length = 5,
   backgroundColor = "#ffffff",
   textColor = "#000000",
-  fontSize = 32,
+  fontSize = 40,
   lineCount = 8,
   dotCount = 50,
   characterSet = "numbers",

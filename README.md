@@ -120,9 +120,11 @@ The `persianCaptchaGenerator` function returns an object with the following prop
 
 ## Sample images
 
-![captcha_numbers](https://github.com/user-attachments/assets/48afd880-76d1-420f-ba7a-a885f016ace9)
-![captcha_alphabets](https://github.com/user-attachments/assets/fdefa724-a428-4bca-9ead-8c91c62a67eb)
-![captcha_both](https://github.com/user-attachments/assets/f688452f-6e32-4e37-886c-e9a5f5938549)
+![num_white](https://github.com/user-attachments/assets/1d02e921-f75f-4bdb-9025-deaac7fb91fe)
+![num_red](https://github.com/user-attachments/assets/bac6ed9f-cdf1-4aa3-944e-57f7cbca60df)
+![num_yellow](https://github.com/user-attachments/assets/46e5d178-9650-4053-a014-cdd873db62ad)
+![alph](https://github.com/user-attachments/assets/8f816bac-fd35-4208-aea8-f556b3a44f13)
+![both](https://github.com/user-attachments/assets/da3c3998-f590-4ba7-b602-6083ccbbd5ef)
 
 ## License
 
