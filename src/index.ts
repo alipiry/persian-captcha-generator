@@ -18,7 +18,6 @@ function registerFont() {
   const possiblePaths = [
     path.resolve(__dirname, "..", "fonts", "IranNastaliq.ttf"),
     path.resolve(
-      process.cwd(),
       "node_modules",
       "persian-captcha-generator",
       "fonts",
