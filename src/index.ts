@@ -13,6 +13,15 @@ interface PersianCaptchaGeneratorOptions {
   characterSet?: "numbers" | "alphabets" | "both";
 }
 
+const FONT_PATH = path.join(__dirname, "..", "fonts", "Vazirmatn-Regular.ttf");
+
+try {
+  registerFont(FONT_PATH, { family: "Vazirmatn" });
+} catch (error) {
+  console.error(`Failed to register font at ${FONT_PATH}:`, error);
+  throw error;
+}
+
 export async function persianCaptchaGenerator({
   width = 200,
   height = 80,
@@ -26,20 +35,6 @@ export async function persianCaptchaGenerator({
 }: PersianCaptchaGeneratorOptions) {
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
-
-  const fontPath = path.resolve(
-    __dirname,
-    "..",
-    "fonts",
-    "Vazirmatn-Regular.ttf"
-  );
-
-  try {
-    registerFont(fontPath, { family: "Vazirmatn" });
-  } catch (error) {
-    console.error("Error registering font:", error);
-    throw new Error(`Failed to load font from path: ${fontPath}`);
-  }
 
   let characters: string;
   if (characterSet === "numbers") {
