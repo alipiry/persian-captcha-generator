@@ -1,5 +1,5 @@
-import path from "path";
 import fs from "fs";
+import { join } from "path";
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
 interface PersianCaptchaGeneratorOptions {
@@ -16,12 +16,13 @@ interface PersianCaptchaGeneratorOptions {
 
 function registerFont() {
   const possiblePaths = [
-    path.resolve(__dirname, "..", "fonts", "IranNastaliq.ttf"),
-    path.resolve(
+    join(__dirname, "..", "fonts", "BNazanin.ttf"),
+    join(
+      process.cwd(),
       "node_modules",
       "persian-captcha-generator",
       "fonts",
-      "IranNastaliq.ttf"
+      "BNazanin.ttf"
     ),
   ];
 
@@ -35,14 +36,14 @@ function registerFont() {
 
   if (!fontPath) {
     throw new Error(
-      `Font file not found. Please ensure IranNastaliq.ttf exists in one of these locations: ${possiblePaths.join(
+      `Font file not found. Please ensure BNazanin.ttf exists in one of these locations: ${possiblePaths.join(
         ", "
       )}`
     );
   }
 
   try {
-    GlobalFonts.registerFromPath(fontPath, "IranNastaliq");
+    GlobalFonts.registerFromPath(fontPath, "BNazanin");
   } catch (error) {
     console.error("Error registering font:", error);
     throw new Error(`Failed to load font from path: ${fontPath}`);
@@ -106,7 +107,7 @@ export async function persianCaptchaGenerator({
     context.fill();
   }
 
-  context.font = `${fontSize}px IranNastaliq`;
+  context.font = `${fontSize}px BNazanin`;
   context.fillStyle = textColor;
   context.textAlign = "center";
   context.textBaseline = "middle";
