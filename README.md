@@ -158,11 +158,12 @@ The `persianCaptchaGenerator` function returns an object with the following prop
 
 ## Sample images
 
-![num_white](https://github.com/user-attachments/assets/1d02e921-f75f-4bdb-9025-deaac7fb91fe)
-![num_red](https://github.com/user-attachments/assets/bac6ed9f-cdf1-4aa3-944e-57f7cbca60df)
-![num_yellow](https://github.com/user-attachments/assets/46e5d178-9650-4053-a014-cdd873db62ad)
-![alph](https://github.com/user-attachments/assets/8f816bac-fd35-4208-aea8-f556b3a44f13)
-![both](https://github.com/user-attachments/assets/da3c3998-f590-4ba7-b602-6083ccbbd5ef)
+![num_white](https://github.com/user-attachments/assets/d694b661-3fd3-4d16-93b6-4bce81702351)
+![num_green](https://github.com/user-attachments/assets/bc76ab1c-dd08-4582-ad56-6a580d50efd6)
+![num_yellow](https://github.com/user-attachments/assets/c28b2dec-b0cd-43be-9d60-8f274c1d003f)
+![num_red](https://github.com/user-attachments/assets/533e700c-503b-49c7-bc29-363c25900502)
+![alph](https://github.com/user-attachments/assets/835192b7-8645-4aaa-a35a-9262aef54246)
+![both](https://github.com/user-attachments/assets/271e2efb-9414-4654-af76-776fdfcad44d)
 
 ## License
 
