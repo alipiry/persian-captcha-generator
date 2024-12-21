@@ -1,5 +1,5 @@
 import fs from "fs";
-import { join } from "path";
+import path from "path";
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
 interface PersianCaptchaGeneratorOptions {
@@ -16,8 +16,8 @@ interface PersianCaptchaGeneratorOptions {
 
 function registerFont() {
   const possiblePaths = [
-    join(__dirname, "..", "fonts", "BNazanin.ttf"),
-    join(
+    path.resolve(__dirname, "..", "fonts", "BNazanin.ttf"),
+    path.resolve(
       process.cwd(),
       "node_modules",
       "persian-captcha-generator",
