@@ -51,6 +51,20 @@ describe("Captcha Generator", () => {
     expect(answers.join("")).toMatch(/[۰-۹]/);
   });
 
+  it("renders a PNG of the requested size", () => {
+    const { imageBuffer } = persianCaptchaGenerator({
+      width: 321,
+      height: 123,
+    });
+
+    expect(imageBuffer.subarray(0, 8)).toEqual(
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    );
+    // IHDR is always the first chunk: width and height follow its type tag.
+    expect(imageBuffer.readUInt32BE(16)).toBe(321);
+    expect(imageBuffer.readUInt32BE(20)).toBe(123);
+  });
+
   it("uses documented defaults when called with no arguments", () => {
     const captcha = persianCaptchaGenerator();
 

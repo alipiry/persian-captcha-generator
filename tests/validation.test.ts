@@ -17,8 +17,9 @@ const bounds = [
   ["dotCount", 0, 500],
 ] as const;
 
-// A canvas big enough that bound tests on one option never trip another limit.
-const roomy = { width: 1000, height: 300, fontSize: 20 };
+// Small text on a big canvas, so a bound test on one option never trips the
+// fit check. Each test overrides only the option under test.
+const roomy = { width: 1000, height: 300, fontSize: 10, length: 4 };
 
 describe("option validation", () => {
   describe.each(bounds)("%s", (name, min, max) => {
@@ -50,6 +51,12 @@ describe("option validation", () => {
       );
     },
   );
+
+  it("rejects a configuration whose text does not fit", () => {
+    expect(() => generate({ length: 10, width: 200, fontSize: 40 })).toThrow(
+      RangeError,
+    );
+  });
 
   it("rejects an unknown characterSet", () => {
     expect(() => generate({ characterSet: "latin" })).toThrow(

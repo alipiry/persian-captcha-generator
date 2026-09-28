@@ -1,6 +1,7 @@
 import { randomInt } from "crypto";
 import path from "path";
-import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts, type SKRSContext2D } from "@napi-rs/canvas";
+import { glyphCenters, maxJitter } from "./layout";
 
 export interface PersianCaptchaGeneratorOptions {
   width?: number;
@@ -124,9 +125,17 @@ export function persianCaptchaGenerator({
     );
   }
 
+  const centers = glyphCenters({
+    length,
+    rtl: characterSet !== "numbers",
+    width,
+    height,
+    fontSize,
+  });
+
   ensureFontRegistered();
 
-  const randomText = generateAnswer(characterSet, length);
+  const text = generateAnswer(characterSet, length);
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");
@@ -134,16 +143,49 @@ export function persianCaptchaGenerator({
   context.fillStyle = backgroundColor;
   context.fillRect(0, 0, width, height);
 
-  for (let i = 0; i < lineCount; i++) {
+  // Half the noise goes over the text so OCR can't just mask it out as
+  // background.
+  const linesUnder = Math.floor(lineCount / 2);
+  const dotsUnder = Math.floor(dotCount / 2);
+  drawNoise(context, linesUnder, dotsUnder);
+
+  context.font = `${fontSize}px ${FONT_FAMILY}`;
+  context.fillStyle = textColor;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  const jitter = maxJitter(fontSize);
+  [...text].forEach((char, i) => {
+    context.save();
+    context.translate(
+      centers[i],
+      height / 2 + (Math.random() * 2 - 1) * jitter,
+    );
+    context.rotate((Math.random() * 2 - 1) * MAX_ROTATION);
+    context.fillText(char, 0, 0);
+    context.restore();
+  });
+
+  drawNoise(context, lineCount - linesUnder, dotCount - dotsUnder);
+
+  return { text, imageBuffer: canvas.toBuffer("image/png") };
+}
+
+const MAX_ROTATION = 0.3; // radians, ~17°: past this Persian glyphs get ambiguous
+
+function drawNoise(context: SKRSContext2D, lines: number, dots: number) {
+  const { width, height } = context.canvas;
+  const randomColor = () => `hsl(${Math.random() * 360}, 70%, 50%)`;
+
+  for (let i = 0; i < lines; i++) {
     context.beginPath();
     context.moveTo(Math.random() * width, Math.random() * height);
     context.lineTo(Math.random() * width, Math.random() * height);
-    context.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    context.strokeStyle = randomColor();
     context.lineWidth = 2;
     context.stroke();
   }
 
-  for (let i = 0; i < dotCount; i++) {
+  for (let i = 0; i < dots; i++) {
     context.beginPath();
     context.arc(
       Math.random() * width,
@@ -152,25 +194,7 @@ export function persianCaptchaGenerator({
       0,
       Math.PI * 2,
     );
-    context.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    context.fillStyle = randomColor();
     context.fill();
   }
-
-  context.font = `${fontSize}px ${FONT_FAMILY}`;
-  context.fillStyle = textColor;
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  const centerX = width / 2;
-  const centerY = height / 2;
-
-  randomText.split("").forEach((char, i) => {
-    const offset = Math.random() * 10 - 5;
-    const x = centerX - (length * fontSize) / 4 + i * (fontSize * 0.6);
-    context.fillText(char, x, centerY + offset);
-  });
-
-  return {
-    text: randomText,
-    imageBuffer: canvas.toBuffer("image/png"),
-  };
 }

@@ -22,6 +22,8 @@ describe("published package", () => {
       "README.md",
       "dist/index.d.ts",
       "dist/index.js",
+      "dist/layout.d.ts",
+      "dist/layout.js",
       "fonts/BNazanin.ttf",
       "package.json",
     ]);
