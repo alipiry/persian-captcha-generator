@@ -26,7 +26,8 @@ describe("published package", () => {
       "dist/layout.js",
       "dist/verify.d.ts",
       "dist/verify.js",
-      "fonts/BNazanin.ttf",
+      "fonts/OFL.txt",
+      "fonts/Vazirmatn.ttf",
       "package.json",
     ]);
   });

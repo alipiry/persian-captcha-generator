@@ -7,7 +7,8 @@ export interface LayoutInput {
   fontSize: number;
 }
 
-const SLOT_STEP_RATIO = 0.6;
+// Vazirmatn glyphs are wide; tighter spacing makes rotated neighbours overlap.
+const SLOT_STEP_RATIO = 0.75;
 const JITTER_RATIO = 0.1;
 
 export const maxJitter = (fontSize: number) => fontSize * JITTER_RATIO;

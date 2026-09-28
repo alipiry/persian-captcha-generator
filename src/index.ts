@@ -37,9 +37,9 @@ export interface PersianCaptcha {
   imageBuffer: Buffer;
 }
 
-const FONT_FAMILY = "BNazanin";
+const FONT_FAMILY = "Vazirmatn";
 // Resolves from both src (tests) and dist (published), which sit at the same depth.
-const FONT_PATH = path.resolve(__dirname, "..", "fonts", "BNazanin.ttf");
+const FONT_PATH = path.resolve(__dirname, "..", "fonts", "Vazirmatn.ttf");
 
 let fontRegistered = false;
 

@@ -30,7 +30,7 @@ describe("glyphCenters", () => {
       glyphCenters({ ...base, length: 10, width: 200, rtl: true }),
     ).toThrow(
       new RangeError(
-        "10 characters at fontSize 40 need a width of at least 256, received 200",
+        "10 characters at fontSize 40 need a width of at least 310, received 200",
       ),
     );
   });
