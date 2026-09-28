@@ -10,8 +10,22 @@ export interface PersianCaptchaGeneratorOptions {
   fontSize?: number;
   lineCount?: number;
   dotCount?: number;
-  characterSet?: "numbers" | "alphabets" | "both";
+  characterSet?: CharacterSet;
 }
+
+const CHARACTER_SETS = ["numbers", "alphabets", "both"] as const;
+type CharacterSet = (typeof CHARACTER_SETS)[number];
+
+// Caps keep option values that leak in from a request from allocating
+// huge canvases or burning CPU; the length floor keeps captchas unguessable.
+const INTEGER_BOUNDS = {
+  width: [50, 1000],
+  height: [30, 500],
+  length: [4, 10],
+  fontSize: [10, 200],
+  lineCount: [0, 50],
+  dotCount: [0, 500],
+} as const satisfies Record<string, readonly [number, number]>;
 
 export interface PersianCaptcha {
   /** The answer, in the order a human reads and types it. */
@@ -35,6 +49,27 @@ function ensureFontRegistered() {
   fontRegistered = true;
 }
 
+function assertIntegerInRange(
+  name: keyof typeof INTEGER_BOUNDS,
+  value: unknown,
+) {
+  const [min, max] = INTEGER_BOUNDS[name];
+  if (typeof value !== "number") {
+    throw new TypeError(`${name} must be a number, received ${typeof value}`);
+  }
+  if (!Number.isInteger(value) || value < min || value > max) {
+    throw new RangeError(
+      `${name} must be an integer from ${min} to ${max}, received ${value}`,
+    );
+  }
+}
+
+function assertString(name: string, value: unknown) {
+  if (typeof value !== "string") {
+    throw new TypeError(`${name} must be a string, received ${typeof value}`);
+  }
+}
+
 export function persianCaptchaGenerator({
   width = 200,
   height = 100,
@@ -46,6 +81,22 @@ export function persianCaptchaGenerator({
   dotCount = 50,
   characterSet = "numbers",
 }: PersianCaptchaGeneratorOptions = {}): PersianCaptcha {
+  // Runtime checks, not just types: JS callers and request-derived values
+  // bypass the compiler.
+  assertIntegerInRange("width", width);
+  assertIntegerInRange("height", height);
+  assertIntegerInRange("length", length);
+  assertIntegerInRange("fontSize", fontSize);
+  assertIntegerInRange("lineCount", lineCount);
+  assertIntegerInRange("dotCount", dotCount);
+  assertString("backgroundColor", backgroundColor);
+  assertString("textColor", textColor);
+  if (!CHARACTER_SETS.includes(characterSet)) {
+    throw new TypeError(
+      `characterSet must be one of ${CHARACTER_SETS.join(", ")}, received ${String(characterSet)}`,
+    );
+  }
+
   ensureFontRegistered();
 
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
