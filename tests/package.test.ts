@@ -24,6 +24,8 @@ describe("published package", () => {
       "dist/index.js",
       "dist/layout.d.ts",
       "dist/layout.js",
+      "dist/verify.d.ts",
+      "dist/verify.js",
       "fonts/BNazanin.ttf",
       "package.json",
     ]);

@@ -3,6 +3,8 @@ import path from "path";
 import { createCanvas, GlobalFonts, type SKRSContext2D } from "@napi-rs/canvas";
 import { glyphCenters, maxJitter } from "./layout";
 
+export { verifyCaptcha } from "./verify";
+
 export interface PersianCaptchaGeneratorOptions {
   width?: number;
   height?: number;
