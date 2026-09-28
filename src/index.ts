@@ -1,8 +1,7 @@
-import fs from "fs";
 import path from "path";
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
-interface PersianCaptchaGeneratorOptions {
+export interface PersianCaptchaGeneratorOptions {
   width?: number;
   height?: number;
   length?: number;
@@ -14,45 +13,29 @@ interface PersianCaptchaGeneratorOptions {
   characterSet?: "numbers" | "alphabets" | "both";
 }
 
-function registerFont() {
-  const possiblePaths = [
-    path.resolve(__dirname, "..", "fonts", "BNazanin.ttf"),
-    path.resolve(
-      process.cwd(),
-      "node_modules",
-      "persian-captcha-generator",
-      "fonts",
-      "BNazanin.ttf",
-    ),
-  ];
-
-  let fontPath = null;
-  for (const candidate of possiblePaths) {
-    if (fs.existsSync(candidate)) {
-      fontPath = candidate;
-      break;
-    }
-  }
-
-  if (!fontPath) {
-    throw new Error(
-      `Font file not found. Please ensure BNazanin.ttf exists in one of these locations: ${possiblePaths.join(
-        ", ",
-      )}`,
-    );
-  }
-
-  try {
-    GlobalFonts.registerFromPath(fontPath, "BNazanin");
-  } catch (error) {
-    console.error("Error registering font:", error);
-    throw new Error(`Failed to load font from path: ${fontPath}`, {
-      cause: error,
-    });
-  }
+export interface PersianCaptcha {
+  /** The answer, in the order a human reads and types it. */
+  text: string;
+  imageBuffer: Buffer;
 }
 
-export async function persianCaptchaGenerator({
+const FONT_FAMILY = "BNazanin";
+// Resolves from both src (tests) and dist (published), which sit at the same depth.
+const FONT_PATH = path.resolve(__dirname, "..", "fonts", "BNazanin.ttf");
+
+let fontRegistered = false;
+
+function ensureFontRegistered() {
+  if (fontRegistered) return;
+  // Returns null instead of throwing, so a missing or corrupt font would
+  // otherwise silently fall back to a system font.
+  if (!GlobalFonts.registerFromPath(FONT_PATH, FONT_FAMILY)) {
+    throw new Error(`Failed to load captcha font from ${FONT_PATH}`);
+  }
+  fontRegistered = true;
+}
+
+export function persianCaptchaGenerator({
   width = 200,
   height = 100,
   length = 5,
@@ -62,8 +45,8 @@ export async function persianCaptchaGenerator({
   lineCount = 8,
   dotCount = 50,
   characterSet = "numbers",
-}: PersianCaptchaGeneratorOptions) {
-  registerFont();
+}: PersianCaptchaGeneratorOptions = {}): PersianCaptcha {
+  ensureFontRegistered();
 
   const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
   const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
@@ -109,7 +92,7 @@ export async function persianCaptchaGenerator({
     context.fill();
   }
 
-  context.font = `${fontSize}px BNazanin`;
+  context.font = `${fontSize}px ${FONT_FAMILY}`;
   context.fillStyle = textColor;
   context.textAlign = "center";
   context.textBaseline = "middle";
