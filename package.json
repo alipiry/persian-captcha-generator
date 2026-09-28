@@ -1,9 +1,20 @@
 {
   "name": "persian-captcha-generator",
   "version": "1.4.0",
-  "description": "A library for generating customizable captchas with Persian numbers and alphabets using node-canvas.",
+  "description": "A library for generating customizable captchas with Persian numbers and alphabets using @napi-rs/canvas.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@12.5.1",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
@@ -11,7 +22,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.9"
@@ -38,7 +50,8 @@
   "files": [
     "dist",
     "fonts",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "keywords": [
     "captcha",
