@@ -44,7 +44,6 @@ coverage/
 *.tmp
 *.temp
 
-.scratch
-
 # Local planning notes
 .scratch/
+docs/
