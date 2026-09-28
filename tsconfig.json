@@ -2,14 +2,12 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "CommonJS",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "declaration": true,
+    "types": ["node"],
     "strict": true,
+    "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["src", "tests"],
-  "exclude": ["node_modules"]
+  "include": ["src", "tests"]
 }

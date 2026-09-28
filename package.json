@@ -1,27 +1,57 @@
 {
   "name": "persian-captcha-generator",
-  "version": "1.4.0",
-  "description": "A library for generating customizable captchas with Persian numbers and alphabets using node-canvas.",
+  "version": "2.0.0",
+  "description": "A library for generating customizable captchas with Persian numbers and alphabets using @napi-rs/canvas.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@12.5.1",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "prepare": "husky",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.65"
+    "@napi-rs/canvas": "^1.0.9"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.2",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.19.0",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.2"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": "prettier --write"
   },
   "files": [
     "dist",
     "fonts",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "keywords": [
     "captcha",
