@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import path from "path";
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
@@ -47,6 +48,32 @@ function ensureFontRegistered() {
     throw new Error(`Failed to load captcha font from ${FONT_PATH}`);
   }
   fontRegistered = true;
+}
+
+const PERSIAN_ALPHABETS = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
+const PERSIAN_NUMBERS = "۰۱۲۳۴۵۶۷۸۹";
+
+const CHARACTERS: Record<CharacterSet, string> = {
+  numbers: PERSIAN_NUMBERS,
+  alphabets: PERSIAN_ALPHABETS,
+  both: PERSIAN_NUMBERS + PERSIAN_ALPHABETS,
+};
+
+// The answer is the secret, so it comes from a CSPRNG; Math.random is
+// fine for cosmetic noise.
+function generateAnswer(characterSet: CharacterSet, length: number) {
+  let text = "";
+  for (let i = 0; i < length; i++) {
+    // Adjacent digits would form an LTR run inside RTL text, giving a
+    // mixed captcha two plausible reading orders.
+    const afterDigit = PERSIAN_NUMBERS.includes(text.at(-1) ?? "");
+    const pool =
+      characterSet === "both" && afterDigit
+        ? PERSIAN_ALPHABETS
+        : CHARACTERS[characterSet];
+    text += pool[randomInt(pool.length)];
+  }
+  return text;
 }
 
 function assertIntegerInRange(
@@ -99,21 +126,7 @@ export function persianCaptchaGenerator({
 
   ensureFontRegistered();
 
-  const persianAlphabets = "ابپتثجچحخدذرزژسشصضطظعغفقکگلمنهوی";
-  const persianNumbers = "۰۱۲۳۴۵۶۷۸۹";
-
-  let characters: string;
-  if (characterSet === "numbers") {
-    characters = persianNumbers;
-  } else if (characterSet === "alphabets") {
-    characters = persianAlphabets;
-  } else {
-    characters = persianNumbers + persianAlphabets;
-  }
-
-  const randomText = Array.from({ length }, () =>
-    characters.charAt(Math.floor(Math.random() * characters.length)),
-  ).join("");
+  const randomText = generateAnswer(characterSet, length);
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");

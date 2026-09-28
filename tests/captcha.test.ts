@@ -35,6 +35,22 @@ describe("Captcha Generator", () => {
     expect(Buffer.isBuffer(captcha.imageBuffer)).toBe(true);
   });
 
+  it("never places two digits next to each other in mixed captchas", () => {
+    const answers = Array.from(
+      { length: 300 },
+      () =>
+        persianCaptchaGenerator({
+          length: 10,
+          width: 400,
+          characterSet: "both",
+        }).text,
+    );
+
+    for (const text of answers) expect(text).not.toMatch(/[۰-۹]{2}/);
+    // Guards against the constraint degenerating into letters-only.
+    expect(answers.join("")).toMatch(/[۰-۹]/);
+  });
+
   it("uses documented defaults when called with no arguments", () => {
     const captcha = persianCaptchaGenerator();
 
