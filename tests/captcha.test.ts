@@ -1,4 +1,5 @@
-import { persianCaptchaGenerator } from "../index";
+import { describe, expect, it } from "vitest";
+import { persianCaptchaGenerator } from "../src/index";
 
 describe("Captcha Generator", () => {
   it("should generate a captcha with Persian numbers", async () => {

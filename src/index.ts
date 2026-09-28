@@ -22,14 +22,14 @@ function registerFont() {
       "node_modules",
       "persian-captcha-generator",
       "fonts",
-      "BNazanin.ttf"
+      "BNazanin.ttf",
     ),
   ];
 
   let fontPath = null;
-  for (const path of possiblePaths) {
-    if (fs.existsSync(path)) {
-      fontPath = path;
+  for (const candidate of possiblePaths) {
+    if (fs.existsSync(candidate)) {
+      fontPath = candidate;
       break;
     }
   }
@@ -37,8 +37,8 @@ function registerFont() {
   if (!fontPath) {
     throw new Error(
       `Font file not found. Please ensure BNazanin.ttf exists in one of these locations: ${possiblePaths.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
@@ -46,7 +46,9 @@ function registerFont() {
     GlobalFonts.registerFromPath(fontPath, "BNazanin");
   } catch (error) {
     console.error("Error registering font:", error);
-    throw new Error(`Failed to load font from path: ${fontPath}`);
+    throw new Error(`Failed to load font from path: ${fontPath}`, {
+      cause: error,
+    });
   }
 }
 
@@ -76,7 +78,7 @@ export async function persianCaptchaGenerator({
   }
 
   const randomText = Array.from({ length }, () =>
-    characters.charAt(Math.floor(Math.random() * characters.length))
+    characters.charAt(Math.floor(Math.random() * characters.length)),
   ).join("");
 
   const canvas = createCanvas(width, height);
@@ -101,7 +103,7 @@ export async function persianCaptchaGenerator({
       Math.random() * height,
       Math.random() * 2 + 1,
       0,
-      Math.PI * 2
+      Math.PI * 2,
     );
     context.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
     context.fill();
